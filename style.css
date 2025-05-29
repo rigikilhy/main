@@ -1,0 +1,70 @@
+#interactive-character {
+    width: 24px;
+    height: 24px;
+    background-image: url('AnimationSheet.png');
+    background-repeat: no-repeat;
+    overflow: hidden;
+    position: absolute;
+    filter: drop-shadow(2px 2px 2px #00000070);
+    z-index: 100;
+    cursor: pointer; /* Add cursor pointer to indicate it's clickable */
+}
+
+.text-block {
+    position: relative;
+    z-index: 10;
+    padding: 20px; 
+    background-color: #f0f0f0; 
+    margin-bottom: 10px;
+}
+
+#dialogue-bubble {
+    position: absolute; /* Already set, but good to confirm */
+    background-color: white; 
+    border: 1px solid black; 
+    border-radius: 10px; /* Slightly more rounded */
+    padding: 10px; 
+    min-width: 120px; /* Min width */
+    max-width: 200px; /* Max width */
+    text-align: center;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+    display: none; /* Initially hidden */
+    z-index: 200; /* Above the character */
+}
+
+#dialogue-bubble::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    border-style: solid;
+    border-color: transparent; /* Default for sides */
+}
+
+/* Default tail pointing down (bubble is above character) */
+#dialogue-bubble.pointing-down::after {
+    bottom: -10px; /* Positioned at the bottom of the bubble */
+    border-width: 10px 10px 0; /* Triangle shape pointing downwards */
+    border-top-color: white; /* Color of the tail (matches bubble background) */
+    /* To add border to the tail itself that matches bubble border:
+       This is complex and often done with multiple pseudo-elements or SVG.
+       A simpler way is a second pseudo-element for the border, slightly larger.
+       For now, keeping it simple.
+    */
+}
+
+/* Optional: Tail pointing up (if bubble is forced below character) */
+#dialogue-bubble.pointing-up::after {
+    top: -10px; /* Positioned at the top of the bubble */
+    border-width: 0 10px 10px; /* Triangle shape pointing upwards */
+    border-bottom-color: white; /* Color of the tail */
+}
+
+
+body {
+    min-height: 100vh;
+    position: relative;
+    margin: 0; /* Good practice */
+    padding: 10px; /* Add some padding so character doesn't stick to edges immediately */
+    box-sizing: border-box;
+}
