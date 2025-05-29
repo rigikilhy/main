@@ -1,0 +1,131 @@
+"I am creating a news website and want to implement a unique, interactive pixel-stylized character that 'lives' on the page. My goal is to add personality and engagement to the user experience.
+
+I will provide you with two images alongside this prompt.
+
+The image.png (colorful, labeled) serves as a visual reference map, showing different animation sequences (IDLE, WALK, KICK, etc.) and their respective frames.
+
+The AnimationSheet.png (black background) is the actual sprite sheet containing all the animation frames. This is the image you should use for the character's background-image.
+
+Crucial Information from Sprite Sheet Package: The grid size for all frames within this sprite sheet is 24 pixels wide and 24 pixels tall. This means each individual character frame is 24px by 24px.
+
+Your task is to generate the complete HTML, CSS, and JavaScript code for a single index.html file that includes this character and implements its specified behaviors. All CSS and JavaScript should either be embedded directly within <style> and <script> tags in index.html or linked to style.css and script.js files (your choice, but ensure it's self-contained for easy testing).
+
+Core Components & Behavior Requirements:
+
+    Main Character Element (Feature 5 - Visuals):
+
+    HTML: Create a div element with the ID interactive-character. This div will display the character.
+
+    CSS:
+
+    Set its width to 24px and height to 24px (the size of a single frame).
+
+    Set its background-image to point to the provided sprite sheet (assume its path is sprite_sheet.png relative to index.html).
+
+    Set background-repeat: no-repeat; and overflow: hidden;.
+
+    Position it using position: absolute; for free movement on the page.
+
+    Add a subtle shadow below the character using filter: drop-shadow() or box-shadow to give it depth.
+
+    Ensure a default z-index that places it above most content, but allowing z-index changes for hiding.
+
+    Initial State: The character should start in an IDLE state, playing its IDLE animation (refer to the labeled image for frame sequence and position).
+
+    Random Movement (Feature 1 & Part of 6 - Motion Effects):
+
+    Behavior: The character should periodically (e.g., every 5-10 seconds) decide to move randomly.
+
+    Motion: It should move in either a purely horizontal or purely vertical direction (not diagonally) to a new random location within the visible viewport.
+
+    Animation: While moving, the character should play its WALK animation (refer to the labeled image for frame sequence and position). The animation should visually cycle through the frames.
+
+    Motion Effect: As it moves and plays the WALK animation, small, brief "dust cloud" elements should dynamically appear and fade out at its feet (e.g., small divs with CSS animations for opacity and scale).
+
+    End State: Once it reaches the new random location, it should stop, transition back to the IDLE animation, and wait for the next random movement cycle.
+
+    Hiding Behind Text Blocks & Peeking (Feature 2):
+
+    HTML: Include at least two <p> (paragraph) elements with placeholder text (e.g., "Lorem ipsum...") on the page. Give these paragraphs a shared class, for example, text-block.
+
+    Behavior: Less frequently than random movement (e.g., every 15-20 seconds, or after a few random moves), the character should choose to hide.
+
+    Selection: It should randomly select one of the text-block elements on the page.
+
+    Hiding Action: The character should animate its movement towards the selected text-block. Upon reaching it, its z-index should be set to a value lower than the text-block's z-index, effectively hiding it behind the text block.
+
+    Hiding Animation: While hidden or immediately after hiding, the character should transition to playing its SIT animation (refer to the labeled image for frame sequence and position), suggesting it's trying to be inconspicuous.
+
+    Peeking Action: After a short delay (e.g., 2-3 seconds) while hidden, the character should briefly "peek" out from behind the text block. This can be achieved by slightly animating its transform: translateY() or translateX() property by a small amount (e.g., 5-10px) to appear to emerge from the top or side of the text block. It should hold this peek for a moment, then retract back behind the text block.
+
+    Resumption: After peeking and retracting, it should wait a short period, then resume its normal random movement cycle (and transition back to IDLE or WALK).
+
+    CSS: Ensure text-block elements have position: relative; and a higher z-index than the character's default.
+
+    Click for Dialogue Bubble (Feature 3):
+
+    HTML/CSS: Create a div element for a dialogue bubble (e.g., id="dialogue-bubble"), styled as a small speech bubble (e.g., with border-radius, background-color, and a pseudo-element for the pointer). It should initially be hidden.
+
+    Behavior: When the interactive-character element is clicked:
+
+    Any ongoing character action (moving, hiding, etc.) should be temporarily paused.
+
+    The dialogue-bubble should become visible and position itself near the character's head.
+
+    Its text content should be set to: "What do you want to talk about?".
+
+    The bubble should automatically disappear after 3-5 seconds, or if the character is clicked again.
+
+    Search Bar Interaction (Feature 4):
+
+    HTML: Include a standard HTML <input type="search" id="search-bar"> element somewhere on the page.
+
+    Behavior:
+
+    Listen for input events on the search-bar.
+
+    If the user types the word "come" (case-insensitive, exactly "come", not "comer" or "welcome"), the character should immediately react.
+
+    Any ongoing character action (random movement, hiding, dialogue) should be interrupted and halted.
+
+    The character should then play its RUN animation (refer to the labeled image for frame sequence and position) as it rapidly animates its movement directly towards the search-bar element.
+
+    It should position itself right next to the search bar (e.g., to its left or right).
+
+    Once it reaches the search bar, it should stop playing RUN and transition back to its IDLE animation.
+
+    Animation Mapping (Using the Sprite Sheet - Important Details for LLM):
+
+    Based on the provided labeled image and the 24x24px grid size:
+
+    IDLE: This animation is located in the first row of the sprite sheet. It has 6 frames.
+
+    WALK: This animation is located in the second row of the sprite sheet. It has 6 frames.
+
+    RUN: This animation is located in the third row of the sprite sheet. It has 6 frames.
+
+    SIT: This animation is located in the last row of the sprite sheet (row number 10 from the top). It has 2 frames.
+
+    Other animations (KICK, ATTACK, JUMP, etc.): You do not need to implement these for this initial version. Focus only on IDLE, WALK, RUN, and SIT.
+
+General Coding Instructions:
+
+HTML Structure: Provide a basic HTML5 boilerplate.
+
+CSS: Use standard CSS.
+
+JavaScript:
+
+Use vanilla JavaScript. Do not use any external JavaScript libraries (e.g., jQuery, GSAP) unless explicitly needed for a core animation method.
+
+Manage character state (e.g., isMoving, isHiding, isTalking) to prevent conflicting actions.
+
+Use requestAnimationFrame for smooth, performant animations where continuous movement is involved, rather than setInterval for constant animation updates.
+
+Ensure all elements are correctly positioned and z-indexed.
+
+Add comments to explain complex logic.
+
+Assume the sprite sheet image file will be named sprite_sheet.png and placed in the same directory as index.html.
+
+Your goal is to provide a fully functional, self-contained example that demonstrates all these behaviors. Thank you!"
