@@ -1,7 +1,8 @@
 #interactive-character {
-    width: 24px;
-    height: 24px;
+    width: 36px;
+    height: 36px;
     background-image: url('AnimationSheet.png');
+    background-size: 216px 360px;
     background-repeat: no-repeat;
     overflow: hidden;
     position: absolute;
@@ -13,17 +14,17 @@
 .text-block {
     position: relative;
     z-index: 10;
-    padding: 20px; 
-    background-color: #f0f0f0; 
+    padding: 20px;
+    background-color: #f0f0f0;
     margin-bottom: 10px;
 }
 
 #dialogue-bubble {
     position: absolute; /* Already set, but good to confirm */
-    background-color: white; 
-    border: 1px solid black; 
+    background-color: white;
+    border: 1px solid black;
     border-radius: 10px; /* Slightly more rounded */
-    padding: 10px; 
+    padding: 10px;
     min-width: 120px; /* Min width */
     max-width: 200px; /* Max width */
     text-align: center;
