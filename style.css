@@ -1,3 +1,139 @@
+/* General Page Styling */
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: 1.6;
+    background-color: #f4f4f4; /* Light gray background */
+    color: #333;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    position: relative; /* For absolute positioning of character/dialogue relative to viewport */
+    box-sizing: border-box;
+}
+
+.news-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff; /* White background for the content area */
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 20px;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2em;
+    color: #007bff; /* A modern blue for the title */
+}
+
+/* Search Bar Styling */
+#search-bar {
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 20px; /* Rounded corners */
+    font-size: 1em;
+    width: 250px;
+    transition: box-shadow 0.3s, border-color 0.3s;
+}
+
+#search-bar:focus {
+    box-shadow: 0 0 5px rgba(0,123,255,0.5);
+    border-color: #007bff;
+    outline: none;
+}
+
+/* Tab Navigation Styling */
+.tab-navigation ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0 0 0px 0; /* Reduced bottom margin to connect with content area */
+    display: flex;
+    border-bottom: 2px solid #ddd; /* Separator line for tabs */
+}
+
+.tab-navigation li {
+    padding: 10px 20px;
+    cursor: pointer;
+    margin-right: 5px;
+    border: 1px solid #ccc;
+    border-bottom: none; /* Remove bottom border for all tabs initially */
+    border-radius: 5px 5px 0 0;
+    background-color: #f9f9f9;
+    position: relative; /* For z-index and margin adjustments */
+    bottom: -2px; /* Align with the content area's border */
+    color: #555;
+    transition: background-color 0.3s;
+}
+
+.tab-navigation li.active-tab {
+    background-color: #fff;
+    border-color: #ddd;
+    border-bottom: 2px solid #fff; /* Merge with content area */
+    z-index: 2; /* Ensure it's above the general border-bottom of ul */
+    color: #007bff;
+    font-weight: bold;
+}
+
+.tab-navigation li:not(.active-tab):hover {
+    background-color: #efefef;
+}
+
+/* Tab Content Styling */
+.tab-content-area {
+    /* The border is now effectively provided by .news-container and tab-navigation's bottom border */
+}
+
+.tab-pane {
+    padding: 20px;
+    /* border: 1px solid #ddd; */ /* Border handled by news-container for outer, tabs for top */
+    /* border-top: none; */ /* Not needed if tab-navigation ul has border-bottom */
+    display: none; /* Hidden by default, JS will show active */
+}
+
+.tab-pane.active-content { /* Class to be added by JS to show content */
+    display: block;
+}
+
+
+/* Article Styling */
+article { /* Using article tag directly as per HTML structure */
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px dashed #eee;
+}
+
+article:last-child {
+    border-bottom: none; /* No border for the last article in a tab */
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+article h2, article h3 { /* Targeting h2 and h3 within articles */
+    margin-top: 0;
+    color: #333;
+    font-size: 1.5em; /* For h2 in articles */
+}
+article h3 {
+    font-size: 1.2em; /* For h3 in articles */
+    color: #444;
+}
+
+
+article p {
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 10px;
+}
+
+/* Character and Dialogue Bubble (Existing Styles - ensure they are not broken) */
 #interactive-character {
     width: 24px;
     height: 24px;
@@ -5,32 +141,33 @@
     background-size: 144px 240px;
     background-repeat: no-repeat;
     overflow: hidden;
-    position: absolute;
+    position: absolute; /* Relative to body/viewport now */
     filter: drop-shadow(2px 2px 2px #00000070);
     z-index: 100;
-    cursor: pointer; /* Add cursor pointer to indicate it's clickable */
+    cursor: pointer;
 }
 
-.text-block {
-    position: relative;
-    z-index: 10;
-    padding: 20px;
-    background-color: #f0f0f0;
-    margin-bottom: 10px;
+.text-block { /* These are now inside #tab-main */
+    position: relative; /* Keep for potential future relative positioning inside */
+    z-index: 10; /* Lower than character */
+    padding: 15px; /* Adjusted padding */
+    background-color: #e9e9e9; /* Slightly different background */
+    margin-bottom: 15px;
+    border-left: 3px solid #007bff;
 }
 
 #dialogue-bubble {
-    position: absolute; /* Already set, but good to confirm */
+    position: absolute; /* Relative to body/viewport now */
     background-color: white;
     border: 1px solid black;
-    border-radius: 10px; /* Slightly more rounded */
+    border-radius: 10px;
     padding: 10px;
-    min-width: 120px; /* Min width */
-    max-width: 200px; /* Max width */
+    min-width: 120px;
+    max-width: 200px;
     text-align: center;
     box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
     display: none; /* Initially hidden */
-    z-index: 200; /* Above the character */
+    z-index: 200; /* Above character */
 }
 
 #dialogue-bubble::after {
@@ -39,33 +176,42 @@
     left: 50%;
     transform: translateX(-50%);
     border-style: solid;
-    border-color: transparent; /* Default for sides */
+    border-color: transparent;
 }
 
-/* Default tail pointing down (bubble is above character) */
 #dialogue-bubble.pointing-down::after {
-    bottom: -10px; /* Positioned at the bottom of the bubble */
-    border-width: 10px 10px 0; /* Triangle shape pointing downwards */
-    border-top-color: white; /* Color of the tail (matches bubble background) */
-    /* To add border to the tail itself that matches bubble border:
-       This is complex and often done with multiple pseudo-elements or SVG.
-       A simpler way is a second pseudo-element for the border, slightly larger.
-       For now, keeping it simple.
-    */
+    bottom: -10px;
+    border-width: 10px 10px 0;
+    border-top-color: white;
 }
 
-/* Optional: Tail pointing up (if bubble is forced below character) */
 #dialogue-bubble.pointing-up::after {
-    top: -10px; /* Positioned at the top of the bubble */
-    border-width: 0 10px 10px; /* Triangle shape pointing upwards */
-    border-bottom-color: white; /* Color of the tail */
+    top: -10px;
+    border-width: 0 10px 10px;
+    border-bottom-color: white;
 }
 
+/* Bell Button Styling */
+#bell-button {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    font-size: 28px;
+    cursor: pointer;
+    z-index: 1000; /* Highest z-index */
+    background-color: #007bff;
+    color: white;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: none; /* Initially hidden, JS controls visibility */
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2); /* Slightly enhanced shadow */
+    transition: background-color 0.3s, transform 0.2s;
+}
 
-body {
-    min-height: 100vh;
-    position: relative;
-    margin: 0; /* Good practice */
-    padding: 10px; /* Add some padding so character doesn't stick to edges immediately */
-    box-sizing: border-box;
+#bell-button:hover {
+    background-color: #0056b3;
+    transform: scale(1.1); /* Slight scale effect on hover */
 }
