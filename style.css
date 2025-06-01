@@ -1,8 +1,8 @@
 #interactive-character {
-    width: 36px;
-    height: 36px;
+    width: 24px;
+    height: 24px;
     background-image: url('AnimationSheet.png');
-    background-size: 216px 360px;
+    background-size: 144px 240px;
     background-repeat: no-repeat;
     overflow: hidden;
     position: absolute;

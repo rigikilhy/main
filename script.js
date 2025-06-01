@@ -51,22 +51,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Animation Definitions (Sprite Sheet Mapping) ---
     // Each key is an animation name, value is an array of {x, y} objects for background-position
-    // Frame size is 36x36px. Original was 24x24px. Coords are scaled by 1.5.
+    // Frame size is 24x24px.
     const animations = {
         "IDLE": [
-            { x: 0, y: 0 }, { x: -36, y: 0 }, { x: -72, y: 0 },
-            { x: -108, y: 0 }, { x: -144, y: 0 }, { x: -180, y: 0 }
+            { x: 0, y: 0 }, { x: -24, y: 0 }, { x: -48, y: 0 },
+            { x: -72, y: 0 }, { x: -96, y: 0 }, { x: -120, y: 0 }
         ],
         "WALK": [
-            { x: 0, y: -36 }, { x: -36, y: -36 }, { x: -72, y: -36 },
-            { x: -108, y: -36 }, { x: -144, y: -36 }, { x: -180, y: -36 }
+            { x: 0, y: -24 }, { x: -24, y: -24 }, { x: -48, y: -24 },
+            { x: -72, y: -24 }, { x: -96, y: -24 }, { x: -120, y: -24 }
         ],
         "RUN": [
-            { x: 0, y: -72 }, { x: -36, y: -72 }, { x: -72, y: -72 },
-            { x: -108, y: -72 }, { x: -144, y: -72 }, { x: -180, y: -72 }
+            { x: 0, y: -48 }, { x: -24, y: -48 }, { x: -48, y: -48 },
+            { x: -72, y: -48 }, { x: -96, y: -48 }, { x: -120, y: -48 }
         ],
         "SIT": [
-            { x: 0, y: -324 }, { x: -36, y: -324 }
+            { x: 0, y: -216 }, { x: -24, y: -216 }
         ]
     };
 
@@ -442,7 +442,7 @@ document.addEventListener('DOMContentLoaded', () => {
             let bubbleHeight = dialogueBubble.offsetHeight;
             dialogueBubble.style.display = 'none'; // Hide again before positioning
 
-            const bubbleVerticalOffset = 18; // Includes 10px tail and 8px gap (scaled from 5px)
+            const bubbleVerticalOffset = 15; // Includes 10px tail and 5px gap
 
             let bubbleLeft = charRect.left + window.scrollX + (charRect.width / 2) - (bubbleWidth / 2);
             let bubbleTop = charRect.top + window.scrollY - bubbleHeight - bubbleVerticalOffset;
@@ -496,7 +496,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const searchBarRect = searchBar.getBoundingClientRect();
                 const charRect = character.getBoundingClientRect();
 
-                targetX = searchBarRect.left + window.scrollX - charRect.width - 15; // Position left of search bar (10px * 1.5)
+                targetX = searchBarRect.left + window.scrollX - charRect.width - 10; // Position left of search bar
                 targetY = searchBarRect.top + window.scrollY + (searchBarRect.height / 2) - (charRect.height / 2); // Vertically align
 
                 targetX = Math.max(0, Math.min(targetX, document.body.scrollWidth - charRect.width));
