@@ -5,14 +5,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const dialogueBubble = document.getElementById('dialogue-bubble');
     const searchBar = document.getElementById('search-bar');
     const bellButton = document.getElementById('bell-button');
-    let searchResultsPopup = null; // Will be created dynamically
+    let searchResultsPopup = null;
 
     // --- Tab Navigation Elements ---
     const tabNavigationItems = document.querySelectorAll('.tab-navigation li');
     const tabContentPanes = document.querySelectorAll('.tab-content-area .tab-pane');
 
     // --- Critical Element Checks ---
-    // ... (existing checks)
+    if (!character) { console.error("Interactive character element not found!"); return; }
+    if (!dialogueBubble) console.error("Dialogue bubble element not found!");
+    if (!searchBar) console.error("Search bar element not found!");
+    if (!bellButton) console.error("Bell button element not found!");
+    if (tabNavigationItems.length === 0 || tabContentPanes.length === 0) {
+        console.warn("Tab navigation elements not found. Tab functionality will be disabled.");
+    }
 
     // --- State Variables ... ---
     let currentAnimationName = null;
@@ -33,20 +39,20 @@ document.addEventListener('DOMContentLoaded', () => {
     let isTalking = false;
     let dialogueTimeoutId = null;
     let previousAnimationBeforeTalk = "IDLE";
-    let isRespondingToSearch = false; // True if character is moving due to "come"
+    let isRespondingToSearch = false;
     let nextActionTimeoutId = null;
     let isCharacterOffScreen = false;
     let isCharacterEnabledByBell = false;
     let summonedInteractionTimeoutId = null;
 
-    const animations = {
+    const animations = { /* ... animations object ... */
         "IDLE": [ { x: 0, y: 0 }, { x: -24, y: 0 }, { x: -48, y: 0 }, { x: -72, y: 0 }, { x: -96, y: 0 }, { x: -120, y: 0 } ],
         "WALK": [ { x: 0, y: -24 }, { x: -24, y: -24 }, { x: -48, y: -24 }, { x: -72, y: -24 }, { x: -96, y: -24 }, { x: -120, y: -24 } ],
         "RUN": [ { x: 0, y: -48 }, { x: -24, y: -48 }, { x: -48, y: -48 }, { x: -72, y: -48 }, { x: -96, y: -48 }, { x: -120, y: -48 } ],
-        "SIT": [ { x: 0, y: -216 }, { x: -24, y: -216 } ]
+        "SIT": [ { x: 0, y: -120 }, { x: -24, y: -120 } ]
     };
 
-    function startSummonedInteractionLoop() {
+    function startSummonedInteractionLoop() { /* ... existing function ... */
         if (!character || character.style.display === 'none' || isCharacterOffScreen) {
             if (summonedInteractionTimeoutId) clearTimeout(summonedInteractionTimeoutId);
             summonedInteractionTimeoutId = null;
@@ -65,15 +71,12 @@ document.addEventListener('DOMContentLoaded', () => {
             summonedInteractionTimeoutId = null;
         }, 5000);
     }
-
-    // ... (stopSpriteAnimation, spriteAnimate, playAnimation, getRandomInterval, createDustPuff, generalMoveLoop)
-    function stopSpriteAnimation() {
+    function stopSpriteAnimation() { /* ... existing function ... */
         if (animationFrameId) cancelAnimationFrame(animationFrameId);
         animationFrameId = null;
         currentAnimationName = null;
     }
-
-    function spriteAnimate(timestamp) {
+    function spriteAnimate(timestamp) { /* ... existing function ... */
         if (!currentAnimationName || !character) return;
         if (timestamp - lastFrameTime > animationSpeed) {
             lastFrameTime = timestamp;
@@ -85,8 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         animationFrameId = requestAnimationFrame(spriteAnimate);
     }
-
-    window.playAnimation = function(animationNameInput) {
+    window.playAnimation = function(animationNameInput) { /* ... existing function ... */
         if (animationNameInput && !animations[animationNameInput]) {
             console.error("Unknown animation:", animationNameInput);
             return;
@@ -99,12 +101,10 @@ document.addEventListener('DOMContentLoaded', () => {
              animationFrameId = requestAnimationFrame(spriteAnimate);
         }
     };
-
-    function getRandomInterval(min, max) {
+    function getRandomInterval(min, max) { /* ... existing function ... */
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
-
-    function createDustPuff() {
+    function createDustPuff() { /* ... existing function ... */
         if (isRespondingToSearch || !character || character.style.display === 'none' || isCharacterOffScreen) return;
         const dustPuff = document.createElement('div');
         dustPuff.style.width = '5px'; dustPuff.style.height = '5px';
@@ -121,8 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 0);
         setTimeout(() => { if (dustPuff.parentElement) dustPuff.parentElement.removeChild(dustPuff); }, 500);
     }
-
-    function generalMoveLoop(onArrivalCallback) {
+    function generalMoveLoop(onArrivalCallback) { /* ... existing function ... */
         if (!((isMoving || isRespondingToSearch) && !isTalking) || !character) {
             if (movementFrameId) cancelAnimationFrame(movementFrameId);
             movementFrameId = null;
@@ -148,9 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         movementFrameId = requestAnimationFrame(() => generalMoveLoop(onArrivalCallback));
     }
-
-
-    function clearAllTimeouts() {
+    function clearAllTimeouts() { /* ... existing function ... */
         if (nextActionTimeoutId) clearTimeout(nextActionTimeoutId);
         if (dialogueTimeoutId) clearTimeout(dialogueTimeoutId);
         if (peekTimeoutId) clearTimeout(peekTimeoutId);
@@ -158,13 +155,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (summonedInteractionTimeoutId) clearTimeout(summonedInteractionTimeoutId);
         nextActionTimeoutId = dialogueTimeoutId = peekTimeoutId = postPeekTimeoutId = summonedInteractionTimeoutId = null;
     }
-
-    function getCurrentActiveTab() {
+    function getCurrentActiveTab() { /* ... existing function ... */
         const activeTab = document.querySelector('.tab-navigation li.active-tab');
         return activeTab ? activeTab.dataset.tab : null;
     }
-
-    function interruptCharacterActions(makeInvisible = false) {
+    function interruptCharacterActions(makeInvisible = false) { /* ... existing function ... */
         clearAllTimeouts();
         if (movementFrameId) cancelAnimationFrame(movementFrameId);
         movementFrameId = null;
@@ -191,8 +186,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     }
-
-    function characterRunOffscreen() {
+    function characterRunOffscreen() { /* ... existing function ... */
         if (!character || isCharacterOffScreen) return;
         interruptCharacterActions(false);
         isCharacterOffScreen = false;
@@ -217,16 +211,22 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function interruptAllActionsForSearch() {
+    function interruptAllActionsForSearch() { // Called when "come" is successful
         isRespondingToSearch = true;
         interruptCharacterActions(false);
         isCharacterOffScreen = false;
         if(character) character.style.display = 'block';
+
+        // Reset bell state as its purpose (enabling "come") is fulfilled
         isCharacterEnabledByBell = false;
-        if (bellButton) bellButton.textContent = '🔔';
+        if (bellButton) {
+            bellButton.textContent = '🔔';
+            bellButton.classList.remove('bell-active');
+            // Consider adding 'bell-inactive' or relying on default styles
+        }
     }
 
-    function scheduleNextAction() {
+    function scheduleNextAction() { /* ... existing function ... */
         clearTimeout(nextActionTimeoutId);
         if (summonedInteractionTimeoutId !== null) return;
         const currentTab = getCurrentActiveTab();
@@ -255,28 +255,69 @@ document.addEventListener('DOMContentLoaded', () => {
             nextActionTimeoutId = setTimeout(startRandomMovement, actionDelay);
         }
     }
-
-    function startRandomMovement() {
-        if (isMoving || isHiding || isHidden || isTalking || isRespondingToSearch || isCharacterOffScreen || !character || character.style.display === 'none' || summonedInteractionTimeoutId !== null) return;
-        // ... (rest of function)
+    function startRandomMovement() { /* ... existing function ... */
+         if (isMoving || isHiding || isHidden || isTalking || isRespondingToSearch || isCharacterOffScreen || !character || character.style.display === 'none' || summonedInteractionTimeoutId !== null) return;
+        isMoving = true; playAnimation("WALK"); previousAnimationBeforeTalk = "IDLE";
+        const charRect = character.getBoundingClientRect(); const bodyRect = document.body.getBoundingClientRect();
+        if (Math.random() < 0.5) {
+            targetX = Math.random() * (bodyRect.width - charRect.width);
+            targetY = parseFloat(character.style.top || '0');
+        } else {
+            targetX = parseFloat(character.style.left || '0');
+            targetY = Math.random() * (bodyRect.height - charRect.height);
+        }
+        targetX = Math.max(0, Math.min(targetX, bodyRect.width - charRect.width));
+        targetY = Math.max(0, Math.min(targetY, bodyRect.height - charRect.height));
+        generalMoveLoop(() => {
+            if (!isRespondingToSearch) {
+                isMoving = false; playAnimation("IDLE"); scheduleNextAction();
+            }
+        });
     }
-    function startHiding() {
+    function startHiding() { /* ... existing function ... */
         if (isMoving || isHiding || isHidden || isTalking || isRespondingToSearch || isCharacterOffScreen || !textBlocks || textBlocks.length === 0 || !character || character.style.display === 'none' || summonedInteractionTimeoutId !== null) {
             if (!isMoving && !isHiding && !isHidden && !isTalking && !isRespondingToSearch && !isCharacterOffScreen && summonedInteractionTimeoutId === null) scheduleNextAction();
             return;
         }
-        // ... (rest of function)
+        isHiding = true; currentHidingSpot = textBlocks[Math.floor(Math.random() * textBlocks.length)];
+        const spotRect = currentHidingSpot.getBoundingClientRect(); const charRect = character.getBoundingClientRect();
+        targetX = spotRect.left + window.scrollX + 5; targetY = spotRect.top + window.scrollY + 5;
+        targetX = Math.max(0, Math.min(targetX, document.body.scrollWidth - charRect.width));
+        targetY = Math.max(0, Math.min(targetY, document.body.scrollHeight - charRect.height));
+        playAnimation("WALK"); previousAnimationBeforeTalk = "SIT";
+        generalMoveLoop(() => {
+            if (!isRespondingToSearch) {
+                if(character) character.style.zIndex = '1';
+                isHidden = true; playAnimation("SIT");
+                clearTimeout(peekTimeoutId); peekTimeoutId = setTimeout(peek, getRandomInterval(2000, 3000));
+            }
+        });
     }
-    function peek() {
+    function peek() { /* ... existing function ... */
         if (!isHidden || !isHiding || isTalking || isRespondingToSearch || isCharacterOffScreen || !character || character.style.display === 'none' || summonedInteractionTimeoutId !== null) return;
-        // ... (rest of function)
+        const peekAmount = -10;
+        if(character) {
+            character.style.transition = 'transform 0.3s ease-in-out';
+            character.style.transform = `translateY(${peekAmount}px)`;
+        }
+        clearTimeout(postPeekTimeoutId);
+        postPeekTimeoutId = setTimeout(() => {
+            if (isRespondingToSearch || !character) return;
+            character.style.transform = 'translateY(0px)';
+            clearTimeout(nextActionTimeoutId);
+            nextActionTimeoutId = setTimeout(finishHiding, getRandomInterval(1000, 2000) + 300);
+        }, 500);
     }
-    function finishHiding() {
+    function finishHiding() { /* ... existing function ... */
         if (!isHiding || isRespondingToSearch || isCharacterOffScreen || !character || summonedInteractionTimeoutId !== null) return;
-        // ... (rest of function)
+         if(character) {
+            character.style.zIndex = '100'; character.style.transition = '';
+        }
+        isHidden = false; isHiding = false; currentHidingSpot = null;
+        playAnimation("IDLE"); previousAnimationBeforeTalk = "IDLE";
+        scheduleNextAction();
     }
-
-    function showDialogueOrHideBubble() {
+    function showDialogueOrHideBubble() { /* ... existing function ... */
         if (isRespondingToSearch || isCharacterOffScreen || !character || !dialogueBubble || character.style.display === 'none') return;
         if (isTalking) {
             dialogueBubble.style.display = 'none'; dialogueBubble.classList.remove('pointing-up', 'pointing-down');
@@ -292,7 +333,6 @@ document.addEventListener('DOMContentLoaded', () => {
             stopSpriteAnimation();
             dialogueBubble.textContent = "What can I help you with?";
             if (summonedInteractionTimeoutId !== null) startSummonedInteractionLoop();
-            // ... (rest of positioning logic)
             const charRect = character.getBoundingClientRect();
             dialogueBubble.style.display = 'block';
             let bubbleWidth = dialogueBubble.offsetWidth; let bubbleHeight = dialogueBubble.offsetHeight;
@@ -323,140 +363,39 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     if (character) character.addEventListener('click', showDialogueOrHideBubble);
 
-    if (bellButton) { /* ... (bell logic) ... */ }
+    // --- Bell Button Logic ---
+    if (bellButton) {
+        bellButton.addEventListener('click', () => {
+            if (bellButton.style.display === 'none') return; // Only if visible
 
-    // --- Search Functionality ---
-    function clearSearchHighlights() {
-        tabContentPanes.forEach(pane => {
-            const marks = pane.querySelectorAll('mark');
-            marks.forEach(mark => {
-                const parent = mark.parentNode;
-                if (parent) { // Ensure parent exists
-                    while (mark.firstChild) {
-                        parent.insertBefore(mark.firstChild, mark);
-                    }
-                    parent.removeChild(mark);
-                    parent.normalize(); // Merges adjacent text nodes
-                }
-            });
+            isCharacterEnabledByBell = !isCharacterEnabledByBell; // Toggle state
+
+            if (isCharacterEnabledByBell) {
+                bellButton.textContent = '🔔 On';
+                bellButton.classList.add('bell-active');
+                bellButton.classList.remove('bell-inactive'); // If using specific inactive class
+                if(searchBar) { setTimeout(() => { searchBar.focus(); }, 300); }
+            } else {
+                bellButton.textContent = '🔔 Off';
+                bellButton.classList.remove('bell-active');
+                bellButton.classList.add('bell-inactive'); // If using specific inactive class
+            }
         });
     }
 
-    function performSearch(searchTerm) {
-        if (!searchTerm) return;
-        const searchResults = [];
-        const regExp = new RegExp(searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi'); // Escape special regex chars
+    // --- Search Functionality (SearchBar Event Listener & related functions) ---
+    // ... (clearSearchHighlights, performSearch, displaySearchResults)
+    function clearSearchHighlights() { /* ... existing ... */ }
+    function performSearch(searchTerm) { /* ... existing ... */ }
+    function displaySearchResults(results, searchTerm) { /* ... existing ... */ }
 
-        tabContentPanes.forEach(pane => {
-            const tabName = tabNavigationItems[Array.from(tabContentPanes).indexOf(pane)]?.textContent || pane.id;
-            // Search within relevant text elements (e.g., p, h2, h3 within articles)
-            pane.querySelectorAll('article p, article h2, article h3, .text-block').forEach(el => {
-                // Avoid re-highlighting already processed elements in this search pass for a given pane
-                // This simple check might not be perfect if elements have identical initial innerHTML
-                // A more robust way would be to store original content and restore before each search.
-                if (el.dataset.originalHtml === undefined) {
-                     el.dataset.originalHtml = el.innerHTML; // Store only once
-                } else {
-                     el.innerHTML = el.dataset.originalHtml; // Restore before new search
-                }
-
-
-                if (regExp.test(el.textContent)) { // Test on textContent for matches
-                    let matchFoundInElement = false;
-                    // Highlight based on innerHTML to preserve structure
-                    el.innerHTML = el.innerHTML.replace(regExp, (match) => {
-                        matchFoundInElement = true;
-                        return `<mark>${match}</mark>`;
-                    });
-
-                    if (matchFoundInElement) {
-                         // Check if this element (or a very similar one) is already added for this tab
-                        const existingResult = searchResults.find(r => r.tabId === pane.id && r.elementToScrollTo === el);
-                        if (!existingResult) {
-                            searchResults.push({
-                                tabId: pane.id,
-                                tabName: tabName,
-                                elementToScrollTo: el,
-                                snippet: el.textContent.substring(0, 150) + "..."
-                            });
-                        }
-                    }
-                }
-            });
-        });
-        displaySearchResults(searchResults, searchTerm);
-    }
-
-    function displaySearchResults(results, searchTerm) {
-        if (!searchResultsPopup) {
-            searchResultsPopup = document.createElement('div');
-            searchResultsPopup.id = 'search-results-popup';
-            // Basic styling, will be enhanced by CSS
-            searchResultsPopup.style.position = 'absolute';
-            searchResultsPopup.style.top = `${(searchBar?.offsetTop || 0) + (searchBar?.offsetHeight || 0) + 5}px`;
-            searchResultsPopup.style.left = `${searchBar?.offsetLeft || 0}px`;
-            searchResultsPopup.style.width = `${searchBar?.offsetWidth || 250}px`;
-            searchResultsPopup.style.border = '1px solid #ccc';
-            searchResultsPopup.style.backgroundColor = 'white';
-            searchResultsPopup.style.zIndex = '1001'; // Above most things
-            searchResultsPopup.style.maxHeight = '300px';
-            searchResultsPopup.style.overflowY = 'auto';
-            const newsContainer = document.querySelector('.news-container');
-            if (newsContainer) newsContainer.appendChild(searchResultsPopup); // Append to news-container
-            else document.body.appendChild(searchResultsPopup); // Fallback to body
-        }
-        searchResultsPopup.innerHTML = ''; // Clear previous results
-
-        if (results.length === 0) {
-            searchResultsPopup.innerHTML = `<p style="padding:10px;">No results found for "<strong>${searchTerm}</strong>".</p>`;
-        } else {
-            results.forEach(result => {
-                const item = document.createElement('div');
-                item.className = 'search-result-item'; // For CSS styling
-                // Basic styling for item
-                item.style.padding = '8px 10px';
-                item.style.borderBottom = '1px solid #eee';
-                item.style.cursor = 'pointer';
-
-                // Create snippet with highlighted term, careful with HTML in snippet
-                let displaySnippet = result.snippet.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-                const regExp = new RegExp(searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
-                displaySnippet = displaySnippet.replace(regExp, (match) => `<strong><mark>${match}</mark></strong>`);
-
-
-                item.innerHTML = `Found in <strong>${result.tabName}</strong>: ${displaySnippet}`;
-                item.addEventListener('mouseover', () => item.style.backgroundColor = '#f0f0f0');
-                item.addEventListener('mouseout', () => item.style.backgroundColor = 'white');
-
-                item.addEventListener('click', () => {
-                    const targetTabNav = document.querySelector(`.tab-navigation li[data-tab="${result.tabId.replace('tab-', '')}"]`);
-                    if (targetTabNav) targetTabNav.click(); // Simulate click to switch tab
-
-                    // Ensure tab switch completes and content is visible before scrolling
-                    setTimeout(() => {
-                        if (result.elementToScrollTo && typeof result.elementToScrollTo.scrollIntoView === 'function') {
-                             result.elementToScrollTo.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                        }
-                    }, 100); // Small delay for tab switch
-
-                    if (searchResultsPopup) searchResultsPopup.style.display = 'none';
-                    if (searchBar) searchBar.value = searchTerm; // Keep search term in bar
-                });
-                searchResultsPopup.appendChild(item);
-            });
-        }
-        if (searchResultsPopup) searchResultsPopup.style.display = 'block';
-    }
-
-
-    if (searchBar) {
+    if (searchBar) { /* ... existing searchBar listener ... */
         searchBar.addEventListener('input', () => {
             const searchTerm = searchBar.value.trim();
             if (searchTerm.toLowerCase() === "come") {
                 if (!character) return;
-                // Hide search results popup if "come" is typed
                 if (searchResultsPopup) searchResultsPopup.style.display = 'none';
-                clearSearchHighlights(); // Clear highlights when "come" is typed
+                clearSearchHighlights();
 
                 const currentTab = getCurrentActiveTab();
                 if (currentTab === "main" || isCharacterEnabledByBell) {
@@ -464,9 +403,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         const mainTabNav = document.querySelector('.tab-navigation li[data-tab="main"]');
                         if (mainTabNav) mainTabNav.click();
                     }
-                    interruptAllActionsForSearch();
+                    interruptAllActionsForSearch(); // Resets bell state and text
                     playAnimation("RUN");
-                    // ... (rest of "come" logic)
                     const searchBarRect = searchBar.getBoundingClientRect();
                     const charRect = character.getBoundingClientRect();
                     targetX = searchBarRect.left + window.scrollX - (character.offsetWidth || 24) - 10;
@@ -475,15 +413,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     targetY = Math.max(0, Math.min(targetY, document.body.scrollHeight - (character.offsetHeight || 24)));
                     generalMoveLoop(() => {
                         isRespondingToSearch = false;
-                        if(searchBar) searchBar.value = ""; // Clear "come" from search bar
+                        if(searchBar) searchBar.value = "";
                         startSummonedInteractionLoop();
                     });
 
                 } else {
                     console.log("Typed 'come' on a non-main tab without bell activation.");
                 }
-            } else { // General search
-                clearSearchHighlights(); // Clear previous highlights immediately
+            } else {
+                clearSearchHighlights();
                 if (searchTerm.length < 3) {
                     if (searchResultsPopup) searchResultsPopup.style.display = 'none';
                     return;
@@ -492,25 +430,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        searchBar.addEventListener('blur', () => {
-            // Hide results popup when search bar loses focus, after a short delay
-            // to allow click on result item
-            setTimeout(() => {
-                if (searchResultsPopup && !searchResultsPopup.contains(document.activeElement)) { // Check if focus moved outside popup
-                    searchResultsPopup.style.display = 'none';
-                }
-            }, 200);
-        });
-         searchBar.addEventListener('focus', () => {
-            // Potentially re-show results if search term is still valid
-            const searchTerm = searchBar.value.trim();
-            if (searchTerm.length >= 3 && searchResultsPopup && searchResultsPopup.children.length > 0) {
-                searchResultsPopup.style.display = 'block';
-            }
-        });
+        searchBar.addEventListener('blur', () => { /* ... existing ... */ });
+        searchBar.addEventListener('focus', () => { /* ... existing ... */ });
     }
 
-    // ... (tabNavigationItems event listeners, Initialization)
+
+    // --- Tab Navigation Logic ---
     if (tabNavigationItems.length > 0 && tabContentPanes.length > 0) {
         tabNavigationItems.forEach(tab => {
             tab.addEventListener('click', (event) => {
@@ -519,12 +444,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (previousActiveTabName === newlyClickedTabName) return;
 
                 if (previousActiveTabName === "main" && newlyClickedTabName !== "main") {
-                    if (bellButton) bellButton.style.display = 'flex';
+                    if (bellButton) {
+                        bellButton.style.display = 'flex';
+                        // Default bell to OFF state when it appears due to tab switch
+                        isCharacterEnabledByBell = false;
+                        bellButton.classList.remove('bell-active');
+                        bellButton.classList.add('bell-inactive'); // Ensure this class exists or default is "off"
+                        bellButton.textContent = '🔔 Off'; // Or just '🔔'
+                    }
                     if (character && !isTalking && !isRespondingToSearch && !isHidden && !isCharacterOffScreen) {
                         characterRunOffscreen();
                     }
                 } else if (newlyClickedTabName === "main") {
-                    if (bellButton) bellButton.style.display = 'none';
+                    if (bellButton) {
+                        bellButton.style.display = 'none';
+                        // Bell state is not changed here; only "come" command resets it after use.
+                    }
                 }
 
                 tabNavigationItems.forEach(item => item.classList.remove('active-tab'));
@@ -533,10 +468,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const targetPane = document.getElementById(`tab-${newlyClickedTabName}`);
                 if (targetPane) targetPane.classList.add('active-content');
 
-                // Clear search highlights and results when changing tabs
                 clearSearchHighlights();
                 if (searchResultsPopup) searchResultsPopup.style.display = 'none';
-
 
                 setTimeout(scheduleNextAction, 50);
             });

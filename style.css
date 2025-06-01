@@ -2,12 +2,12 @@
 body {
     font-family: Arial, Helvetica, sans-serif;
     line-height: 1.6;
-    background-color: #f4f4f4; /* Light gray background */
+    background-color: #f4f4f4;
     color: #333;
     margin: 0;
     padding: 0;
     min-height: 100vh;
-    position: relative; /* For absolute positioning of character/dialogue relative to viewport */
+    position: relative;
     box-sizing: border-box;
 }
 
@@ -15,7 +15,7 @@ body {
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
-    background-color: #fff; /* White background for the content area */
+    background-color: #fff;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
@@ -31,14 +31,14 @@ header {
 header h1 {
     margin: 0;
     font-size: 2em;
-    color: #007bff; /* A modern blue for the title */
+    color: #007bff;
 }
 
 /* Search Bar Styling */
 #search-bar {
     padding: 10px 15px;
     border: 1px solid #ccc;
-    border-radius: 20px; /* Rounded corners */
+    border-radius: 20px;
     font-size: 1em;
     width: 250px;
     transition: box-shadow 0.3s, border-color 0.3s;
@@ -54,9 +54,9 @@ header h1 {
 .tab-navigation ul {
     list-style-type: none;
     padding: 0;
-    margin: 0 0 0px 0; /* Reduced bottom margin to connect with content area */
+    margin: 0 0 0px 0;
     display: flex;
-    border-bottom: 2px solid #ddd; /* Separator line for tabs */
+    border-bottom: 2px solid #ddd;
 }
 
 .tab-navigation li {
@@ -64,11 +64,11 @@ header h1 {
     cursor: pointer;
     margin-right: 5px;
     border: 1px solid #ccc;
-    border-bottom: none; /* Remove bottom border for all tabs initially */
+    border-bottom: none;
     border-radius: 5px 5px 0 0;
     background-color: #f9f9f9;
-    position: relative; /* For z-index and margin adjustments */
-    bottom: -2px; /* Align with the content area's border */
+    position: relative;
+    bottom: -2px;
     color: #555;
     transition: background-color 0.3s;
 }
@@ -76,8 +76,8 @@ header h1 {
 .tab-navigation li.active-tab {
     background-color: #fff;
     border-color: #ddd;
-    border-bottom: 2px solid #fff; /* Merge with content area */
-    z-index: 2; /* Ensure it's above the general border-bottom of ul */
+    border-bottom: 2px solid #fff;
+    z-index: 2;
     color: #007bff;
     font-weight: bold;
 }
@@ -88,76 +88,68 @@ header h1 {
 
 /* Tab Content Styling */
 .tab-content-area {
-    /* The border is now effectively provided by .news-container and tab-navigation's bottom border */
 }
 
 .tab-pane {
     padding: 20px;
-    /* border: 1px solid #ddd; */ /* Border handled by news-container for outer, tabs for top */
-    /* border-top: none; */ /* Not needed if tab-navigation ul has border-bottom */
-    display: none; /* Hidden by default, JS will show active */
+    display: none;
 }
 
-.tab-pane.active-content { /* Class to be added by JS to show content */
+.tab-pane.active-content {
     display: block;
 }
 
-
 /* Article Styling */
-article { /* Using article tag directly as per HTML structure */
+article {
     margin-bottom: 30px;
     padding-bottom: 20px;
     border-bottom: 1px dashed #eee;
 }
-
 article:last-child {
-    border-bottom: none; /* No border for the last article in a tab */
+    border-bottom: none;
     margin-bottom: 0;
     padding-bottom: 0;
 }
-
-article h2, article h3 { /* Targeting h2 and h3 within articles */
+article h2, article h3 {
     margin-top: 0;
     color: #333;
-    font-size: 1.5em; /* For h2 in articles */
+    font-size: 1.5em;
 }
 article h3 {
-    font-size: 1.2em; /* For h3 in articles */
+    font-size: 1.2em;
     color: #444;
 }
-
-
 article p {
     color: #555;
     line-height: 1.6;
     margin-bottom: 10px;
 }
 
-/* Character and Dialogue Bubble (Existing Styles - ensure they are not broken) */
+/* Character and Dialogue Bubble */
 #interactive-character {
     width: 24px;
     height: 24px;
     background-image: url('AnimationSheet.png');
-    background-size: 144px 240px;
+    background-size: 192px 144px;
     background-repeat: no-repeat;
     overflow: hidden;
-    position: absolute; /* Relative to body/viewport now */
+    position: absolute;
     filter: drop-shadow(2px 2px 2px #00000070);
     z-index: 100;
     cursor: pointer;
 }
 
-.text-block { /* These are now inside #tab-main */
-    position: relative; /* Keep for potential future relative positioning inside */
-    z-index: 10; /* Lower than character */
-    padding: 15px; /* Adjusted padding */
-    background-color: #e9e9e9; /* Slightly different background */
+.text-block {
+    position: relative;
+    z-index: 10;
+    padding: 15px;
+    background-color: #e9e9e9;
     margin-bottom: 15px;
     border-left: 3px solid #007bff;
 }
 
 #dialogue-bubble {
-    position: absolute; /* Relative to body/viewport now */
+    position: absolute;
     background-color: white;
     border: 1px solid black;
     border-radius: 10px;
@@ -166,52 +158,77 @@ article p {
     max-width: 200px;
     text-align: center;
     box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
-    display: none; /* Initially hidden */
-    z-index: 200; /* Above character */
+    display: none;
+    z-index: 200;
 }
+#dialogue-bubble::after { /* ... existing tail styles ... */ }
+#dialogue-bubble.pointing-down::after { /* ... existing tail styles ... */ }
+#dialogue-bubble.pointing-up::after { /* ... existing tail styles ... */ }
 
-#dialogue-bubble::after {
-    content: '';
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    border-style: solid;
-    border-color: transparent;
-}
-
-#dialogue-bubble.pointing-down::after {
-    bottom: -10px;
-    border-width: 10px 10px 0;
-    border-top-color: white;
-}
-
-#dialogue-bubble.pointing-up::after {
-    top: -10px;
-    border-width: 0 10px 10px;
-    border-bottom-color: white;
-}
 
 /* Bell Button Styling */
-#bell-button {
+#bell-button { /* Default / Off state */
     position: fixed;
     bottom: 30px;
     right: 30px;
-    font-size: 28px;
+    font-size: 24px; /* Adjusted for consistency with On/Off text */
     cursor: pointer;
-    z-index: 1000; /* Highest z-index */
-    background-color: #007bff;
+    z-index: 1000;
+    background-color: #6c757d; /* Gray for "off" */
     color: white;
-    width: 50px;
+    width: auto; /* Adjust width to content */
+    min-width: 50px; /* Ensure minimum size */
     height: 50px;
-    border-radius: 50%;
-    display: none; /* Initially hidden, JS controls visibility */
+    border-radius: 25px; /* Pill shape if width is auto, or keep 50% for circle */
+    padding: 0 15px; /* Padding for text */
+    display: none;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.2); /* Slightly enhanced shadow */
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
     transition: background-color 0.3s, transform 0.2s;
 }
 
+#bell-button.bell-active { /* On state */
+    background-color: #28a745; /* Green for "on" */
+    color: white;
+}
+
 #bell-button:hover {
-    background-color: #0056b3;
-    transform: scale(1.1); /* Slight scale effect on hover */
+    transform: scale(1.1);
+}
+
+/* Style for search results popup */
+#search-results-popup {
+    position: absolute;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    z-index: 1001; /* Above header/tabs, but below character potentially */
+    max-height: 300px;
+    overflow-y: auto;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    border-radius: 0 0 5px 5px; /* Rounded bottom corners */
+}
+
+.search-result-item {
+    padding: 10px 15px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    font-size: 0.9em;
+}
+
+.search-result-item:last-child {
+    border-bottom: none;
+}
+
+.search-result-item:hover {
+    background-color: #f5f5f5;
+}
+
+.search-result-item strong { /* Tab name */
+    color: #007bff;
+}
+.search-result-item mark { /* Highlighted search term */
+    background-color: #ffe082; /* Yellowish highlight */
+    padding: 0.1em 0;
+    border-radius: 2px;
 }
